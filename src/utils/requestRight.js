@@ -20,20 +20,17 @@ const service = axios.create({
   timeout: 5000 // request timeout
 })
 
-// request interceptor
 service.interceptors.request.use(
   config => {
     config.headers['Token'] = getToken() || ''
     return config
   },
   error => {
-    // do something with request error
-    console.log(error) // for debug
+    console.log(error)
     return Promise.reject(error)
   }
 )
 
-// response interceptor
 service.interceptors.response.use(
   /**
    * If you want to get http information such as headers or status
@@ -46,13 +43,13 @@ service.interceptors.response.use(
    * You can also judge the status by HTTP Status Code
    */
   response => {
-    const res = response.data
-    // console.log(res, typeof res)
-    if (res instanceof Blob) {
-      return res
-    }
-    // if the custom code is not 20000, it is judged as an error.
-    if (res.code !== 1) {
+    // 这是mork数据地址 可以删掉
+    const res = response.data.data.JSON
+    // const res = response.data
+    // if (res instanceof Blob) {
+    //   return res
+    // }
+    if (res.code === 1) {
       Message({
         message: res.msg || 'Error',
         type: 'error',
