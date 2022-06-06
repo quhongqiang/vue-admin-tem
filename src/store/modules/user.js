@@ -35,9 +35,10 @@ const mutations = {
 
 const actions = {
   login({ commit }, userInfo) {
-    const { username, password, vercode } = userInfo
+    const { username, password } = userInfo
     return new Promise((resolve, reject) => {
-      login({ username: username.trim(), password: MD5(`${password}`), vercode: vercode }).then(response => {
+      login({ username: username.trim(), password: MD5(`${password}`) }).then(response => {
+        console.log(response, 'response')
         const { token } = response.data
         commit('SET_TOKEN', token)
         setToken(token)
@@ -72,7 +73,7 @@ const actions = {
       let btns = []
       let page = []
       // 超级管理员
-      if (is_super_user === 'zhangyugang') {
+      if (is_super_user === 'admin') {
         btns = 'super_user'
         page = 'super_user'
       } else {

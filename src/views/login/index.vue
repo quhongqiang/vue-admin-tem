@@ -39,32 +39,12 @@
         />
       </el-form-item>
 
-      <el-form-item prop="vercode">
-        <div style="display: flex;justify-content: space-between;">
-          <div style="display: flex;align-items: center;">
-            <i class="el-icon-lock" style="color: #fff; font-size: 18px;margin: 0 18px;" />
-            <el-input
-              ref="vercode"
-              v-model="loginForm.vercode"
-              placeholder="验证码"
-              name="vercode"
-              type="text"
-              autocomplete="on"
-            />
-          </div>
-          <div @click="clickImg">
-            <img v-if="codeImg" style="width: 100%;height: 100%;" :src="codeImg" alt="">
-          </div>
-        </div>
-      </el-form-item>
-
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登 录</el-button>
     </el-form>
   </div>
 </template>
 
 <script>
-import { getCode } from '@/api/user'
 export default {
   name: 'Login',
   data() {
@@ -82,32 +62,21 @@ export default {
         callback()
       }
     }
-    const validateCode = (rule, value, callback) => {
-      if (value.length < 4) {
-        callback(new Error('请输入正确的验证码'))
-      } else {
-        callback()
-      }
-    }
     return {
       loginForm: {
         username: 'admin',
-        password: '123456',
-        vercode: ''
+        password: '123456'
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword }],
-        vercode: [{ required: true, trigger: 'blur', validator: validateCode }]
+        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
       },
       loading: false,
       redirect: undefined,
-      codeImg: '',
       flag: true
     }
   },
   mounted() {
-    this.init()
     if (this.loginForm.username === '') {
       this.$refs.username.focus()
     } else if (this.loginForm.password === '') {
@@ -115,22 +84,6 @@ export default {
     }
   },
   methods: {
-    async init() {
-      const res = await getCode()
-      const myBlob = new window.Blob([res], { type: 'image/jpeg' })
-      const qrUrl = window.URL.createObjectURL(myBlob)
-
-      this.codeImg = qrUrl
-    },
-    clickImg() {
-      if (this.flag) {
-        this.flag = false
-        this.init()
-        setTimeout(() => {
-          this.flag = true
-        }, 2000)
-      }
-    },
     handleLogin() {
       this.$refs.loginForm.validate((valid) => {
         if (valid) {

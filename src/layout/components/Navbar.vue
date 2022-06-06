@@ -45,7 +45,6 @@
 </template>
 
 <script>
-import { PasswordSave } from '@/api/changePsd'
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
@@ -87,11 +86,7 @@ export default {
       newFormData.append('password', password)
       newFormData.append('newPassword', newPassword)
       newFormData.append('newQuePassword', newQuePassword)
-      PasswordSave(newFormData).then(res => {
-        console.log(res)
-        this.$message.error(res.msg)
-        this.dialogFormVisible = false
-      })
+      console.log('修改密码成功', newFormData)
     }
   }
 }
